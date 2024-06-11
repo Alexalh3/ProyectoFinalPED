@@ -3,15 +3,17 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 import graficosprueba1 as d951
 
+#Iniciamos utilizando la aplicacion dash
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY], suppress_callback_exceptions=True)
 
-# Sidebar layout
+# Sidebar layout de la barra lateral
 sidebar = html.Div(
     [
         html.H1("Proyecto Final", className="display-5"),
         html.Hr(),
         html.P("Menu de graficos obtenidos", className="lead"),
         dbc.Nav(
+            #Comienza la navegacion
             [
                 dbc.NavLink("Inicio", href="/", active="exact"),
                 dbc.NavLink("Visualización de datos", href="/visualizacion-datos", active="exact"),  # Nueva entrada
@@ -28,7 +30,7 @@ sidebar = html.Div(
     className="SIDEBAR_STYLE",
 )
 
-# Content layout
+# layout del contenido 
 content = html.Div(id="page-content", className="CONTENT_STYLE")
 
 app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
@@ -36,6 +38,15 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
 # Callback to render the content based on the current pathname
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
+    """
+    Renderiza el contenido de la página según la ruta actual.
+
+    Args:
+        pathname (str): La ruta actual de la URL.
+
+    Returns:
+        html.Div: El contenido de la página renderizado.
+    """
     if pathname == "/":
         return d951.infoinicio()
 
@@ -70,6 +81,7 @@ def render_page_content(pathname):
                 dbc.Col(d951.boxplot_precios(), width=6)
             ])
         ])
+        #Manejo de la pagina
     return html.Div(
         [
             html.H1("404: Not found", className="text-danger"),
@@ -78,7 +90,7 @@ def render_page_content(pathname):
         ],
         className="p-3 bg-light rounded-3",
     )
-
+#Llamamos a la funcion para registrar los callbacks definidos en graficosprueba1
 d951.register_callbacks(app)
 
 if __name__ == "__main__":
