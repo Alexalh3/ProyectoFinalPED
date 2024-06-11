@@ -3,6 +3,7 @@ import mysql.connector
 
 
 def insertardatos(producto_id, calificacion_id, precio_id,ID_PaginaWeb):
+    #Establecemos la conexion con la base de datos
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
