@@ -4,15 +4,18 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html, Input, Output, dash_table
 
 def infoinicio():
+    #Retorna un Div con informacion sobre el proyecto realizado
     return html.Div(
         style={"backgroundColor": "black", "color": "white", "textAlign": "center", "fontSize": "20px", "padding": "50px"},
         children=[
+            #Titulo y descripccion del proyecto 
             html.H1("Trabajo Final", className="display-5", style={"fontSize": "50px", "color": "red"}),
             html.Hr(),
             html.P("Realizado por:", style={"color": "red"}),
             html.Ul(
                 style={"listStyleType": "none", "padding": 0},
                 children=[
+                    #Integrantes
                     html.Li("Arellano Reyes David Alfonzo"),
                     html.Li("Armienta Suarez Brenda Syan"),
                     html.Li("Camberos Galindo Miguel Samahel"),
@@ -20,6 +23,8 @@ def infoinicio():
                     html.Li("Ramírez Solís Karla Guadalupe"),
                 ]
             ),
+            #Creacion de los subtitulos
+            #Objeivos
             html.H2("Objetivos", style={"fontSize": "40px", "color": "red"}),
             html.H3("Objetivo general", style={"fontSize": "30px", "color": "red"}),
             html.P(
@@ -44,10 +49,12 @@ def infoinicio():
     )
 
 def load_data():
+    #Carga los datos desde el archivo csv
     return pd.read_csv("datasets/concatenado.csv")
 
 # Dashboard 1
 def total_opiniones():
+    #Crea y retorna un grafico de barras que muestra el total de las opiniones de cada pagina web
     data1 = load_data()
     total_opiniones_por_pagina = data1.groupby("paguina web")["opiniones"].sum().reset_index()
     total_opiniones_por_pagina = total_opiniones_por_pagina.sort_values(by='opiniones', ascending=True)
@@ -55,6 +62,7 @@ def total_opiniones():
                  title="<b>Total de Opiniones por Página Web </b>",
                  color="paguina web", barmode="group")
 
+    #Establecimos el estilo del grafico 
     fig.update_layout(
         paper_bgcolor="black",
         plot_bgcolor="black",
@@ -200,11 +208,15 @@ def boxplot_precios():
     return dcc.Graph(figure=fig)
 
 def register_callbacks(app):
+    #Registra los callback de la apliacion
     @app.callback(
         Output("figVentasGenero", "figure"),
         Input("ddlCompany", "value")
     )
     def update_ventas_genero(company):
+        
+      #  Actualiza el gráfico de ventas por género según la empresa seleccionada.
+        
         data1 = load_data()
         data_filtered = data1[data1['paguina web'].str.lower() == company.lower()]
         fig = px.line(data_filtered, x="genero", y="precios", title=f"Ventas {company}")
